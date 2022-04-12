@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
       
-      -run: make
+      - run: make
         timeout-minutes: 5
   
   push_to_mirror:
