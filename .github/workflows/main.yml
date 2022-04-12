@@ -33,7 +33,7 @@ jobs:
         with:
           fetch-depth: 0
       - run: make tests_run
-        tiemout-minutes: 2
+        timeout-minutes: 5
 
   push_to_mirror:
     name: Push to the repository
