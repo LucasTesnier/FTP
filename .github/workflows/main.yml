@@ -22,6 +22,19 @@ jobs:
       - run: make
         timeout-minutes: 5
   
+  tests_run:
+    name: tests_run
+    runs-on: ubuntu-latest
+    needs: [check_make]
+    container: epitechcontent/epitest-docker:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: make tests_run
+        tiemout-minutes: 2
+
   push_to_mirror:
     name: Push to the repository
     runs-on: ubuntu-latest
