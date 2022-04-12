@@ -9,9 +9,23 @@ env:
   REPO_URL: "git@github.com:EpitechPromo2025/B-NWP-400-NAN-4-1-myftp-lucas.tesnier.git"
 
 jobs:
+  check_make:
+    name: Make all
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker:latest
+    steps:
+      - name : Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      -run: make
+        timeout-minutes: 5
+  
   push_to_mirror:
     name: Push to the repository
     runs-on: ubuntu-latest
+    needs: [check_make]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -22,6 +36,6 @@ jobs:
         uses: pixta-dev/repository-mirroring-action@v1
         with:
           target_repo_url:
-            ${{ env.REPO_URL }}
+            ${{ env.REPO_URL }}git@github.com:EpitechPromo2025/B-NWP-400-NAN-4-1-myftp-lucas.tesnier.git
           ssh_private_key:
             ${{ secrets.PUBLIC_SSH }}

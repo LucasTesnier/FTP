@@ -1,0 +1,15 @@
+/*
+** EPITECH PROJECT, 2022
+** Project
+** File description:
+** macro
+*/
+
+#ifndef MACRO_H_
+    #define MACRO_H_
+
+    #define FTP_ERROR -1
+    #define PROGRAM_ERROR 84
+    #define PROGRAM_SUCCESS 0
+
+#endif /* !MACRO_H_ */
