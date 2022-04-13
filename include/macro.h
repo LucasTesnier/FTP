@@ -9,7 +9,9 @@
     #define MACRO_H_
 
     #define FTP_ERROR -1
+    #define ARGUMENT_ERROR -1
     #define PROGRAM_ERROR 84
     #define PROGRAM_SUCCESS 0
+    #define FUNCTION_SUCCESS 0
 
 #endif /* !MACRO_H_ */

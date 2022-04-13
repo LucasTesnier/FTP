@@ -9,7 +9,8 @@ CC 		= 	gcc
 
 MAIN	=	src/main.c
 
-FILES	=	src/init_ftp.c
+FILES	=	src/init_ftp.c		\
+			src/data_gestion.c
 
 SRC 	=	$(MAIN)		\
 			$(FILES)
