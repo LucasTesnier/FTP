@@ -25,12 +25,20 @@ void display_error(char *str, data_t *head)
 
 int argument_gestion(int ac, char **av, data_t *head)
 {
+    char *endPtr = NULL;
+
     if (ac == 2 && strcmp(av[1], "-h") == 0) {
         display_help(head);
         return ARGUMENT_ERROR;
     }
     if (ac != 3) {
         display_error("Invalid number of arguments.", head);
+        return ARGUMENT_ERROR;
+    }
+    head->home_path = av[2];
+    head->port = strtol(av[1], &endPtr, 10);
+    if (endPtr == av[1]) {
+        display_error("Invalid port. Number only.", head);
         return ARGUMENT_ERROR;
     }
     return FUNCTION_SUCCESS;
