@@ -6,6 +6,8 @@
 */
 
 #include "data_gestion.h"
+#include "socket_function.h"
+#include "macro.h"
 #include <stdlib.h>
 
 data_t *init_data(void)
@@ -30,4 +32,31 @@ void destroy_data(data_t *head)
         }
     }
     free(head);
+}
+
+connexion_t *server_init(data_t *head)
+{
+    connexion_t *server = malloc(sizeof(connexion_t) * 1);
+
+    if (server == NULL) {
+        destroy_data(head);
+        return NULL;
+    }
+    server->my_socket = create_socket(head);
+    if (server->my_socket == INVALID_SOCKET)
+        return NULL;
+    server->interface = create_interface(head);
+    if (binding_interface(server, head) == INVALID_INTERFACE) {
+        closesocket(server->my_socket);
+        free(server);
+        return NULL;
+    }
+    server->is_active = true;
+    return server;
+}
+
+void destroy_server(connexion_t *server)
+{
+    closesocket(server->my_socket);
+    free(server);
 }

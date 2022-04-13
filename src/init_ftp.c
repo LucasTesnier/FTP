@@ -10,18 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-void display_help(data_t *head)
-{
-    printf("My FTP Usage\n");
-    destroy_data(head);
-}
-
-void display_error(char *str, data_t *head)
-{
-    fprintf(stderr, "%s\n", str);
-    destroy_data(head);
-}
+#include "utils.h"
 
 int argument_gestion(int ac, char **av, data_t *head)
 {
@@ -47,11 +36,15 @@ int argument_gestion(int ac, char **av, data_t *head)
 int init_ftp(int ac, char **av)
 {
     data_t *head = init_data();
+    connexion_t *server = NULL;
 
     if (head == NULL)
         return FTP_ERROR;
     if (argument_gestion(ac, av, head) == ARGUMENT_ERROR)
         return ARGUMENT_ERROR;
+    if ((server = server_init(head)) == NULL)
+        return SERVER_ERROR;
+    destroy_server(server);
     destroy_data(head);
     return PROGRAM_SUCCESS;
 }

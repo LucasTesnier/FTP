@@ -37,5 +37,7 @@ typedef struct data_s {
 
 data_t *init_data(void);
 void destroy_data(data_t *head);
+connexion_t *server_init(data_t *head);
+void destroy_server(connexion_t *server);
 
 #endif /* !DATA_GESTION_H_ */
