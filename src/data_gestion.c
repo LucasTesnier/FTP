@@ -31,6 +31,7 @@ void destroy_data(data_t *head)
             free(head->data[i]);
         }
     }
+    free(head->data);
     free(head);
 }
 

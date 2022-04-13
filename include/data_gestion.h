@@ -17,10 +17,10 @@
 
     #define closesocket(s) close(s)
 
-    typedef int SOCKET;
+typedef int SOCKET;
 
-    typedef struct sockaddr_in sockaddr_in_t;
-    typedef struct sockaddr sockaddr_t;
+typedef struct sockaddr_in sockaddr_in_t;
+typedef struct sockaddr sockaddr_t;
 
 typedef struct connexion_s {
     SOCKET my_socket;

@@ -8,6 +8,7 @@
 #include "macro.h"
 #include "init_ftp.h"
 #include "socket_function.h"
+#include "ftp_command.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -42,6 +43,22 @@ int argument_gestion(int ac, char **av, data_t *head)
     return FUNCTION_SUCCESS;
 }
 
+int readfs_traitment(connexion_t *server, data_t *head, fd_set *readfs)
+{
+    int return_value = FUNCTION_SUCCESS;
+
+    if (FD_ISSET(server->my_socket, readfs) &&
+    server_connexion(server, head) < 0)
+        return SERVER_ERROR;
+    for (int i = 0; i < head->size; i++) {
+        if (FD_ISSET(head->data[i]->my_socket, readfs))
+            return_value = command_traitment(server, head->data[i], head);
+        if (return_value == SERVER_ERROR)
+            return SERVER_ERROR;
+    }
+    return FUNCTION_SUCCESS;
+}
+
 int server_loop(connexion_t *server, data_t *head)
 {
     fd_set readfs;
@@ -50,6 +67,8 @@ int server_loop(connexion_t *server, data_t *head)
     while (running) {
         FD_ZERO(&readfs);
         FD_SET(server->my_socket, &readfs);
+        for (int i = 0; i < head->size; i++)
+            FD_SET(head->data[i]->my_socket, &readfs);
         max = ((head->size > 0) ? head->data[head->size - 1]->my_socket : \
         server->my_socket);
         if (select(max + 1, &readfs, NULL, NULL, NULL) < 0 && running == 1) {
@@ -58,8 +77,7 @@ int server_loop(connexion_t *server, data_t *head)
         }
         if (running == 0)
             return FUNCTION_SUCCESS;
-        if (FD_ISSET(server->my_socket, &readfs) &&
-            server_connexion(server, head) < 0)
+        if (readfs_traitment(server, head, &readfs))
             return SERVER_ERROR;
     }
     return FUNCTION_SUCCESS;

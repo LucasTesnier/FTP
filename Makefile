@@ -12,7 +12,8 @@ MAIN	=	src/main.c
 FILES	=	src/init_ftp.c			\
 			src/data_gestion.c		\
 			src/socket_function.c	\
-			src/utils.c
+			src/utils.c				\
+			src/ftp_command.c
 
 SRC 	=	$(MAIN)		\
 			$(FILES)
