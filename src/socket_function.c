@@ -9,6 +9,7 @@
 #include "macro.h"
 #include "utils.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 SOCKET create_socket(data_t *head)
 {
@@ -35,7 +36,8 @@ int binding_interface(connexion_t *server, data_t *head)
 {
     sockaddr_in_t *temp = &(server->interface);
 
-    if (bind(server->my_socket, (sockaddr_t *)temp, sizeof *temp) == INVALID_INTERFACE) {
+    if (bind(server->my_socket, (sockaddr_t *)temp, sizeof *temp) ==
+    INVALID_INTERFACE) {
         display_error("Bind have failed. Port already taken.", head);
         return INVALID_INTERFACE;
     }
@@ -50,5 +52,26 @@ int set_queue_limit(connexion_t *server, data_t *head)
         free(server);
         return INVALID_SOCKET;
     }
+    return FUNCTION_SUCCESS;
+}
+
+int server_connexion(connexion_t *server, data_t *head)
+{
+    connexion_t *client = malloc(sizeof(connexion_t));
+    socklen_t size = sizeof client->interface;
+
+    if (client == NULL)
+        return SERVER_ERROR;
+    client->my_socket = accept(server->my_socket,
+    (sockaddr_t *)&(client->interface), &size);
+    if (client->my_socket == INVALID_SOCKET) {
+        display_error("Accept have Failed.", head);
+        return SERVER_ERROR;
+    }
+    client->is_active = true;
+    printf("220 Service ready for new user.\n");
+    fflush(NULL);
+    if (add_in_head(head, client))
+        return SERVER_ERROR;
     return FUNCTION_SUCCESS;
 }

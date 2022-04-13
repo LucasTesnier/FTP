@@ -7,17 +7,18 @@
 
 #include "macro.h"
 #include "init_ftp.h"
+#include "socket_function.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "utils.h"
 #include <signal.h>
 
-static volatile int keepRunning = 1;
+static volatile int running = 1;
 
-void initHandler(int dummy)
+void init_handler(int dummy)
 {
-    keepRunning = 0;
+    running = 0;
 }
 
 int argument_gestion(int ac, char **av, data_t *head)
@@ -43,7 +44,23 @@ int argument_gestion(int ac, char **av, data_t *head)
 
 int server_loop(connexion_t *server, data_t *head)
 {
-    while(keepRunning) {
+    fd_set readfs;
+    SOCKET max = 0;
+
+    while (running) {
+        FD_ZERO(&readfs);
+        FD_SET(server->my_socket, &readfs);
+        max = ((head->size > 0) ? head->data[head->size - 1]->my_socket : \
+        server->my_socket);
+        if (select(max + 1, &readfs, NULL, NULL, NULL) < 0 && running == 1) {
+            display_error("Select have failed.", head);
+            return SERVER_ERROR;
+        }
+        if (running == 0)
+            return FUNCTION_SUCCESS;
+        if (FD_ISSET(server->my_socket, &readfs) &&
+            server_connexion(server, head) < 0)
+            return SERVER_ERROR;
     }
     return FUNCTION_SUCCESS;
 }
@@ -59,7 +76,7 @@ int init_ftp(int ac, char **av)
         return ARGUMENT_ERROR;
     if ((server = server_init(head)) == NULL)
         return SERVER_ERROR;
-    signal(SIGINT, initHandler);
+    signal(SIGINT, init_handler);
     if (server_loop(server, head) == SERVER_ERROR)
         return SERVER_ERROR;
     destroy_server(server);

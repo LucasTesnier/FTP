@@ -62,3 +62,14 @@ void destroy_server(connexion_t *server)
     closesocket(server->my_socket);
     free(server);
 }
+
+int add_in_head(data_t *head, connexion_t *client)
+{
+    head->data = reallocarray(head->data, head->size + 1,
+    sizeof(connexion_t *));
+    if (head->data == NULL)
+        return FTP_ERROR;
+    head->data[head->size] = client;
+    head->size += 1;
+    return FUNCTION_SUCCESS;
+}
