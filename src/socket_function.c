@@ -6,6 +6,7 @@
 */
 
 #include "socket_function.h"
+#include "ftp_command.h"
 #include "macro.h"
 #include "utils.h"
 #include <stdlib.h>
@@ -69,8 +70,7 @@ int server_connexion(connexion_t *server, data_t *head)
         return SERVER_ERROR;
     }
     client->is_active = true;
-    printf("220 Service ready for new user.\n");
-    fflush(NULL);
+    write_to_client(head, client, "220 Service ready for new user.\n");
     if (add_in_head(head, client))
         return SERVER_ERROR;
     return FUNCTION_SUCCESS;
