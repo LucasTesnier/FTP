@@ -11,6 +11,14 @@
 #include <stdio.h>
 #include <string.h>
 #include "utils.h"
+#include <signal.h>
+
+static volatile int keepRunning = 1;
+
+void initHandler(int dummy)
+{
+    keepRunning = 0;
+}
 
 int argument_gestion(int ac, char **av, data_t *head)
 {
@@ -33,6 +41,13 @@ int argument_gestion(int ac, char **av, data_t *head)
     return FUNCTION_SUCCESS;
 }
 
+int server_loop(connexion_t *server, data_t *head)
+{
+    while(keepRunning) {
+    }
+    return FUNCTION_SUCCESS;
+}
+
 int init_ftp(int ac, char **av)
 {
     data_t *head = init_data();
@@ -43,6 +58,9 @@ int init_ftp(int ac, char **av)
     if (argument_gestion(ac, av, head) == ARGUMENT_ERROR)
         return ARGUMENT_ERROR;
     if ((server = server_init(head)) == NULL)
+        return SERVER_ERROR;
+    signal(SIGINT, initHandler);
+    if (server_loop(server, head) == SERVER_ERROR)
         return SERVER_ERROR;
     destroy_server(server);
     destroy_data(head);

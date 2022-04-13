@@ -8,6 +8,7 @@
 #include "socket_function.h"
 #include "macro.h"
 #include "utils.h"
+#include <stdlib.h>
 
 SOCKET create_socket(data_t *head)
 {
@@ -37,6 +38,17 @@ int binding_interface(connexion_t *server, data_t *head)
     if (bind(server->my_socket, (sockaddr_t *)temp, sizeof *temp) == INVALID_INTERFACE) {
         display_error("Bind have failed. Port already taken.", head);
         return INVALID_INTERFACE;
+    }
+    return FUNCTION_SUCCESS;
+}
+
+int set_queue_limit(connexion_t *server, data_t *head)
+{
+    if (listen(server->my_socket, 5) == INVALID_SOCKET) {
+        display_error("Listen have Failed.", head);
+        closesocket(server->my_socket);
+        free(server);
+        return INVALID_SOCKET;
     }
     return FUNCTION_SUCCESS;
 }
