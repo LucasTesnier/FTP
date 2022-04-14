@@ -37,12 +37,12 @@ char *arg)
 {
     if (strcmp(arg, "Anonymous") == 0) {
         if (write_to_client(head, client,
-        "331 User name okay, need password.\n") == FTP_ERROR)
+            "331 User name okay, need password.\n") == FTP_ERROR)
             return FTP_ERROR;
         client->is_auth = USER;
     } else {
         if (write_to_client(head, client,
-        "430 Invalid user name.\n") == FTP_ERROR)
+            "430 Invalid user name.\n") == FTP_ERROR)
             return FTP_ERROR;
     }
     return FUNCTION_SUCCESS;
@@ -53,18 +53,18 @@ char *arg)
 {
     if (client->is_auth != USER) {
         if (write_to_client(head, client,
-        "332 Need account for login.\n") == FTP_ERROR)
+            "332 Need account for login.\n") == FTP_ERROR)
             return FTP_ERROR;
         return FUNCTION_SUCCESS;
     }
     if (strcmp(arg, "") == 0) {
         if (write_to_client(head, client,
-        "230 User logged in, proceed.\n") == FTP_ERROR)
-        return FTP_ERROR;
+            "230 User logged in, proceed.\n") == FTP_ERROR)
+            return FTP_ERROR;
         client->is_auth = CONNECTED;
     } else {
         if (write_to_client(head, client,
-        "430 Invalid password.\n") == FTP_ERROR)
+            "430 Invalid password.\n") == FTP_ERROR)
             return FTP_ERROR;
     }
     return FUNCTION_SUCCESS;
@@ -75,13 +75,13 @@ char *arg)
 {
     if (client->is_auth != CONNECTED) {
         if (write_to_client(head, client,
-        "532 Need account for execute this command.\n") == FTP_ERROR)
+            "532 Need account for execute this command.\n") == FTP_ERROR)
             return FTP_ERROR;
         return FUNCTION_SUCCESS;
     }
     if (write_to_client(head, client,
-        "200 Command okay.\n") == FTP_ERROR)
-            return FTP_ERROR;
+    "200 Command okay.\n") == FTP_ERROR)
+    return FTP_ERROR;
     return FUNCTION_SUCCESS;
 }
 
