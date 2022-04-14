@@ -44,7 +44,31 @@ char *arg)
         free(client->current_directory);
         client->current_directory = strdup(arg);
         if (write_to_client(head, client,
-        "250 Requested file action okay, completed.\n") == FTP_ERROR)
+            "250 Requested file action okay, completed.\n") == FTP_ERROR)
+            return FTP_ERROR;
+    }
+    return FUNCTION_SUCCESS;
+}
+
+int command_cdup(data_t *head, connexion_t *server, connexion_t *client,
+char *arg)
+{
+    char *new_path = NULL;
+
+    if (client->is_auth != CONNECTED) {
+        if (write_to_client(head, client,
+            "532 Need account for execute this command.\n") == FTP_ERROR)
+            return FTP_ERROR;
+        return FUNCTION_SUCCESS;
+    }
+    if ((new_path = go_back_path(client->current_directory,
+        head, client)) == NULL)
+        return FTP_ERROR;
+    if (is_a_directory(new_path, true, head, client) == 1) {
+        free(client->current_directory);
+        client->current_directory = new_path;
+        if (write_to_client(head, client,
+        "200 Command okay.\n") == FTP_ERROR)
             return FTP_ERROR;
     }
     return FUNCTION_SUCCESS;

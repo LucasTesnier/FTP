@@ -55,3 +55,28 @@ connexion_t *client)
         return NOT_A_DIRECTORY;
     }
 }
+
+char *go_back_path(char *path, data_t *head, connexion_t *client)
+{
+    char *new_path = strdup(path);
+    int count = 0;
+    int coun = 0;
+
+    for (int i = 0; i < strlen(new_path); i++)
+        if (new_path[i] == '/')
+            count++;
+    if (count == 0 || count == 1) {
+        new_path[0] = '/';
+        new_path[1] = '\0';
+        return new_path;
+    }
+    for (int i = 0; i < strlen(new_path); i++) {
+        if (new_path[i] == '/')
+            coun++;
+        if (coun == count) {
+            new_path[i] = '\0';
+            break;
+        }
+    }
+    return new_path;
+}

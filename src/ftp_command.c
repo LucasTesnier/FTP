@@ -15,13 +15,14 @@
 #include <stdio.h>
 #include <string.h>
 
-static int command_number = 7;
+static int command_number = 8;
 
 static command_t all_command[] = {
     {"QUIT", NULL, &command_quit},
     {"NOOP", NULL, &command_noop},
     {"HELP", NULL, &command_help},
     {"PWD", NULL, &command_pwd},
+    {"CDUP", NULL, &command_cdup},
     {"USER", "", &command_user},
     {"PASS", "", &command_pass},
     {"CWD", "", &command_cwd}
