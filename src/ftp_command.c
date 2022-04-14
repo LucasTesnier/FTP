@@ -13,11 +13,12 @@
 #include <stdio.h>
 #include <string.h>
 
-static int command_number = 2;
+static int command_number = 3;
 
 static command_t all_command[] = {
     {"QUIT", NULL, &command_quit},
-    {"USER", "", &command_user}
+    {"USER", "", &command_user},
+    {"PASS", "", &command_pass}
 };
 
 int write_to_client(data_t *head, connexion_t *client, char *message)

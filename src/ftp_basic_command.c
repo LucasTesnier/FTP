@@ -35,9 +35,6 @@ char *arg)
 int command_user(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
-    if (write_to_client(head, client,
-    "230 User logged in, proceed.\n") == FTP_ERROR)
-        return FTP_ERROR;
     if (strcmp(arg, "Anonymous") == 0) {
         if (write_to_client(head, client,
         "331 User name okay, need password.\n") == FTP_ERROR)
@@ -46,6 +43,28 @@ char *arg)
     } else {
         if (write_to_client(head, client,
         "504 Invalid user name.\n") == FTP_ERROR)
+            return FTP_ERROR;
+    }
+    return FUNCTION_SUCCESS;
+}
+
+int command_pass(data_t *head, connexion_t *server, connexion_t *client,
+char *arg)
+{
+    if (client->is_auth != USER) {
+        if (write_to_client(head, client,
+        "332 Need account for login.\n") == FTP_ERROR)
+            return FTP_ERROR;
+        return FUNCTION_SUCCESS;
+    }
+    if (strcmp(arg, "") == 0) {
+        if (write_to_client(head, client,
+        "230 User logged in, proceed.\n") == FTP_ERROR)
+        return FTP_ERROR;
+        client->is_auth = CONNECTED;
+    } else {
+        if (write_to_client(head, client,
+        "504 Invalid password.\n") == FTP_ERROR)
             return FTP_ERROR;
     }
     return FUNCTION_SUCCESS;
