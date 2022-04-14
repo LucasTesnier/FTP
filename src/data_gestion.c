@@ -38,6 +38,7 @@ void destroy_data(data_t *head)
     for (int i = 0; i < head->size; i++) {
         if (head->data[i]->is_active) {
             closesocket(head->data[i]->my_socket);
+            free(head->data[i]->current_directory);
         }
         free(head->data[i]);
     }

@@ -11,6 +11,7 @@
 #include "utils.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 /**
 *@brief Create a socket object
@@ -104,7 +105,7 @@ int server_connexion(connexion_t *server, data_t *head)
     }
     client->is_active = true;
     client->is_auth = OFFLINE;
-    client->current_directory = head->home_path;
+    client->current_directory = strdup(head->home_path);
     write_to_client(head, client, "220 Service ready for new user.\n");
     if (add_in_head(head, client))
         return SERVER_ERROR;

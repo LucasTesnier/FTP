@@ -37,6 +37,7 @@ char *arg)
         return FTP_ERROR;
     }
     closesocket(client->my_socket);
+    free(client->current_directory);
     client->is_active = false;
     return FUNCTION_SUCCESS;
 }

@@ -30,3 +30,22 @@ char *arg)
         return FTP_ERROR;
     return FUNCTION_SUCCESS;
 }
+
+int command_cwd(data_t *head, connexion_t *server, connexion_t *client,
+char *arg)
+{
+    if (client->is_auth != CONNECTED) {
+        if (write_to_client(head, client,
+            "532 Need account for execute this command.\n") == FTP_ERROR)
+            return FTP_ERROR;
+        return FUNCTION_SUCCESS;
+    }
+    if (is_a_directory(arg, true, head, client) == 1) {
+        free(client->current_directory);
+        client->current_directory = strdup(arg);
+        if (write_to_client(head, client,
+        "250 Requested file action okay, completed.\n") == FTP_ERROR)
+            return FTP_ERROR;
+    }
+    return FUNCTION_SUCCESS;
+}

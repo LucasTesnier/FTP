@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static int command_number = 6;
+static int command_number = 7;
 
 static command_t all_command[] = {
     {"QUIT", NULL, &command_quit},
@@ -23,7 +23,8 @@ static command_t all_command[] = {
     {"HELP", NULL, &command_help},
     {"PWD", NULL, &command_pwd},
     {"USER", "", &command_user},
-    {"PASS", "", &command_pass}
+    {"PASS", "", &command_pass},
+    {"CWD", "", &command_cwd}
 };
 
 /**

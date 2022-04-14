@@ -16,5 +16,7 @@
     #define PROGRAM_ERROR 84
     #define PROGRAM_SUCCESS 0
     #define FUNCTION_SUCCESS 0
+    #define NOT_A_DIRECTORY 0
+    #define A_DIRECTORY 1
 
 #endif /* !MACRO_H_ */
