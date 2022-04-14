@@ -13,10 +13,11 @@
 #include <stdio.h>
 #include <string.h>
 
-static int command_number = 3;
+static int command_number = 4;
 
 static command_t all_command[] = {
     {"QUIT", NULL, &command_quit},
+    {"NOOP", NULL, &command_noop},
     {"USER", "", &command_user},
     {"PASS", "", &command_pass}
 };

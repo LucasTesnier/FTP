@@ -42,7 +42,7 @@ char *arg)
         client->is_auth = USER;
     } else {
         if (write_to_client(head, client,
-        "504 Invalid user name.\n") == FTP_ERROR)
+        "430 Invalid user name.\n") == FTP_ERROR)
             return FTP_ERROR;
     }
     return FUNCTION_SUCCESS;
@@ -64,9 +64,24 @@ char *arg)
         client->is_auth = CONNECTED;
     } else {
         if (write_to_client(head, client,
-        "504 Invalid password.\n") == FTP_ERROR)
+        "430 Invalid password.\n") == FTP_ERROR)
             return FTP_ERROR;
     }
+    return FUNCTION_SUCCESS;
+}
+
+int command_noop(data_t *head, connexion_t *server, connexion_t *client,
+char *arg)
+{
+    if (client->is_auth != CONNECTED) {
+        if (write_to_client(head, client,
+        "532 Need account for execute this command.\n") == FTP_ERROR)
+            return FTP_ERROR;
+        return FUNCTION_SUCCESS;
+    }
+    if (write_to_client(head, client,
+        "200 Command okay.\n") == FTP_ERROR)
+            return FTP_ERROR;
     return FUNCTION_SUCCESS;
 }
 
