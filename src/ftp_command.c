@@ -13,10 +13,11 @@
 #include <stdio.h>
 #include <string.h>
 
-static int command_number = 1;
+static int command_number = 2;
 
 static command_t all_command[] = {
-    {"QUIT", NULL, &command_quit}
+    {"QUIT", NULL, &command_quit},
+    {"USER", "", &command_user}
 };
 
 int write_to_client(data_t *head, connexion_t *client, char *message)
@@ -56,6 +57,7 @@ command_t parse_command(char *command)
     if (count != strlen(command)) {
         actual_command.name[count] = '\0';
         actual_command.arg = command + count + 1;
+        actual_command.arg[strlen(actual_command.arg) - 1] = '\0';
     } else {
         actual_command.name[count - 1] = '\0';
     }

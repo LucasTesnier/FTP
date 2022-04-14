@@ -16,14 +16,38 @@
 int command_quit(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
+    char *message = NULL;
+
     (void) server;
     (void) arg;
-    if (write_to_client(head, client,
-    "221 Service closing control connection.\n") == FTP_ERROR) {
+    if (client->is_auth == CONNECTED)
+        message = "221 Logout. Service closing control connection.\n";
+    else
+        message = "221 Service closing control connection.\n";
+    if (write_to_client(head, client, message) == FTP_ERROR) {
         return FTP_ERROR;
     }
     closesocket(client->my_socket);
     client->is_active = false;
+    return FUNCTION_SUCCESS;
+}
+
+int command_user(data_t *head, connexion_t *server, connexion_t *client,
+char *arg)
+{
+    if (write_to_client(head, client,
+    "230 User logged in, proceed.\n") == FTP_ERROR)
+        return FTP_ERROR;
+    if (strcmp(arg, "Anonymous") == 0) {
+        if (write_to_client(head, client,
+        "331 User name okay, need password.\n") == FTP_ERROR)
+            return FTP_ERROR;
+        client->is_auth = USER;
+    } else {
+        if (write_to_client(head, client,
+        "504 Invalid user name.\n") == FTP_ERROR)
+            return FTP_ERROR;
+    }
     return FUNCTION_SUCCESS;
 }
 

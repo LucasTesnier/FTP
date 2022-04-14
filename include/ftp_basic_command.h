@@ -13,5 +13,7 @@
 int command_quit(data_t *head, connexion_t *server, connexion_t *client,
 char *arg);
 int command_invalid(data_t *head, connexion_t *server, connexion_t *client);
+int command_user(data_t *head, connexion_t *server, connexion_t *client,
+char *arg);
 
 #endif /* !FTP_BASIC_COMMAND_H_ */

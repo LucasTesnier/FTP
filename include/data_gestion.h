@@ -22,10 +22,17 @@ typedef int SOCKET;
 typedef struct sockaddr_in sockaddr_in_t;
 typedef struct sockaddr sockaddr_t;
 
+typedef enum authentification_s {
+    OFFLINE,
+    USER,
+    CONNECTED
+} authentification_t;
+
 typedef struct connexion_s {
     SOCKET my_socket;
     sockaddr_in_t interface;
     bool is_active;
+    authentification_t is_auth;
 } connexion_t;
 
 typedef struct data_s {

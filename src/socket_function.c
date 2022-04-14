@@ -70,6 +70,7 @@ int server_connexion(connexion_t *server, data_t *head)
         return SERVER_ERROR;
     }
     client->is_active = true;
+    client->is_auth = OFFLINE;
     write_to_client(head, client, "220 Service ready for new user.\n");
     if (add_in_head(head, client))
         return SERVER_ERROR;

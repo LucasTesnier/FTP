@@ -55,6 +55,7 @@ connexion_t *server_init(data_t *head)
     if (set_queue_limit(server, head) == INVALID_INTERFACE)
         return NULL;
     server->is_active = true;
+    server->is_auth = OFFLINE;
     return server;
 }
 
