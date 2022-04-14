@@ -10,6 +10,11 @@
 #include "macro.h"
 #include <stdlib.h>
 
+/**
+*@brief init the data structure
+*
+*@return data_t*
+*/
 data_t *init_data(void)
 {
     data_t *head = malloc(sizeof(data_t) * 1);
@@ -23,6 +28,11 @@ data_t *init_data(void)
     return head;
 }
 
+/**
+*@brief destroy the data structure
+*
+*@param head
+*/
 void destroy_data(data_t *head)
 {
     for (int i = 0; i < head->size; i++) {
@@ -35,6 +45,12 @@ void destroy_data(data_t *head)
     free(head);
 }
 
+/**
+*@brief init the server connexion
+*
+*@param head
+*@return connexion_t*
+*/
 connexion_t *server_init(data_t *head)
 {
     connexion_t *server = malloc(sizeof(connexion_t) * 1);
@@ -59,12 +75,24 @@ connexion_t *server_init(data_t *head)
     return server;
 }
 
+/**
+*@brief destroy the server connexion
+*
+*@param server
+*/
 void destroy_server(connexion_t *server)
 {
     closesocket(server->my_socket);
     free(server);
 }
 
+/**
+*@brief add a connexion into the head
+*
+*@param head
+*@param client
+*@return int
+*/
 int add_in_head(data_t *head, connexion_t *client)
 {
     head->data = reallocarray(head->data, head->size + 1,

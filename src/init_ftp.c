@@ -17,11 +17,24 @@
 
 static volatile int running = 1;
 
+/**
+*@brief init the signal catcher function
+*
+*@param dummy
+*/
 void init_handler(int dummy)
 {
     running = 0;
 }
 
+/**
+*@brief gestion of the process args
+*
+*@param ac
+*@param av
+*@param head
+*@return int
+*/
 int argument_gestion(int ac, char **av, data_t *head)
 {
     char *endPtr = NULL;
@@ -43,6 +56,14 @@ int argument_gestion(int ac, char **av, data_t *head)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief traitment of the readfs array of select
+*
+*@param server
+*@param head
+*@param readfs
+*@return int
+*/
 int readfs_traitment(connexion_t *server, data_t *head, fd_set *readfs)
 {
     int return_value = FUNCTION_SUCCESS;
@@ -60,6 +81,13 @@ int readfs_traitment(connexion_t *server, data_t *head, fd_set *readfs)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief global loop of the server
+*
+*@param server
+*@param head
+*@return int
+*/
 int server_loop(connexion_t *server, data_t *head)
 {
     fd_set readfs;
@@ -85,6 +113,13 @@ int server_loop(connexion_t *server, data_t *head)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief init the FTP project
+*
+*@param ac
+*@param av
+*@return int
+*/
 int init_ftp(int ac, char **av)
 {
     data_t *head = init_data();

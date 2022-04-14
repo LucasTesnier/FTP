@@ -13,6 +13,15 @@
 #include <stdio.h>
 #include <string.h>
 
+/**
+*@brief do the HELP command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_help(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {

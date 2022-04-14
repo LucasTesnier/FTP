@@ -13,6 +13,15 @@
 #include <stdio.h>
 #include <string.h>
 
+/**
+*@brief do the QUIT command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_quit(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
@@ -32,6 +41,15 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief do the USER command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_user(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
@@ -48,6 +66,15 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief do the PASS command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_pass(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
@@ -70,6 +97,15 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief do the NOOP command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_noop(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
@@ -84,6 +120,14 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief In case of invalid / unknown command 
+*
+*@param head
+*@param server
+*@param client
+*@return int
+*/
 int command_invalid(data_t *head, connexion_t *server, connexion_t *client)
 {
     if (write_to_client(head, client,

@@ -24,6 +24,14 @@ static command_t all_command[] = {
     {"PASS", "", &command_pass}
 };
 
+/**
+*@brief write a message to the client socket
+*
+*@param head
+*@param client
+*@param message
+*@return int
+*/
 int write_to_client(data_t *head, connexion_t *client, char *message)
 {
     if (write(client->my_socket, message, strlen(message)) == FTP_ERROR) {
@@ -33,6 +41,13 @@ int write_to_client(data_t *head, connexion_t *client, char *message)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief read a message from the client socket
+*
+*@param client
+*@param head
+*@return char*
+*/
 char *read_command(connexion_t *client, data_t *head)
 {
     char *message = malloc(sizeof(char) * 4086);
@@ -47,6 +62,12 @@ char *read_command(connexion_t *client, data_t *head)
     return message;
 }
 
+/**
+*@brief parse the receive command
+*
+*@param command
+*@return command_t
+*/
 command_t parse_command(char *command)
 {
     command_t actual_command;
@@ -68,6 +89,12 @@ command_t parse_command(char *command)
     return actual_command;
 }
 
+/**
+*@brief find the matching command to the user request
+*
+*@param command
+*@return int
+*/
 int find_matching_command(command_t command)
 {
     int count = 0;
@@ -88,6 +115,14 @@ int find_matching_command(command_t command)
     return -1;
 }
 
+/**
+*@brief Hold all the command process
+*
+*@param server
+*@param client
+*@param head
+*@return int
+*/
 int command_traitment(connexion_t *server, connexion_t *client, data_t *head)
 {
     char *command = read_command(client, head);

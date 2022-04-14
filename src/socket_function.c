@@ -12,6 +12,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/**
+*@brief Create a socket object
+*
+*@param head
+*@return SOCKET
+*/
 SOCKET create_socket(data_t *head)
 {
     SOCKET new_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -23,6 +29,12 @@ SOCKET create_socket(data_t *head)
     return new_socket;
 }
 
+/**
+*@brief Create a interface object
+*
+*@param head
+*@return sockaddr_in_t
+*/
 sockaddr_in_t create_interface(data_t *head)
 {
     sockaddr_in_t interface;
@@ -33,6 +45,13 @@ sockaddr_in_t create_interface(data_t *head)
     return interface;
 }
 
+/**
+*@brief bind an interface with is socket
+*
+*@param server
+*@param head
+*@return int
+*/
 int binding_interface(connexion_t *server, data_t *head)
 {
     sockaddr_in_t *temp = &(server->interface);
@@ -45,6 +64,13 @@ int binding_interface(connexion_t *server, data_t *head)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief Set the queue limit object
+*
+*@param server
+*@param head
+*@return int
+*/
 int set_queue_limit(connexion_t *server, data_t *head)
 {
     if (listen(server->my_socket, 5) == INVALID_SOCKET) {
@@ -56,6 +82,13 @@ int set_queue_limit(connexion_t *server, data_t *head)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief Hold the accept of a new client process
+*
+*@param server
+*@param head
+*@return int
+*/
 int server_connexion(connexion_t *server, data_t *head)
 {
     connexion_t *client = malloc(sizeof(connexion_t));

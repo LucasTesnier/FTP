@@ -8,6 +8,13 @@
 #include "init_ftp.h"
 #include "macro.h"
 
+/**
+*@brief main function
+*
+*@param ac
+*@param av
+*@return int
+*/
 int main(int ac, char **av)
 {
     int return_value = init_ftp(ac, av);
