@@ -31,18 +31,45 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+char *command_cwd_new_path(data_t *head, connexion_t *server,
+connexion_t *client, char *arg)
+{
+    char *path = strdup(client->current_directory);
+
+    if (path == NULL)
+        return NULL;
+    if (arg[0] != '/') {
+        path = realloc(path, strlen(arg) + strlen(path) + 2);
+        if (path == NULL)
+            return NULL;
+        path[strlen(client->current_directory)] = '/';
+        path[strlen(client->current_directory) + 1] = '\0';
+        strcat(path, arg);
+    } else {
+        free(path);
+        path = strdup(arg);
+        if (path == NULL)
+            return NULL;
+    }
+    return path;
+}
+
 int command_cwd(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
+    char *path = NULL;
+
     if (client->is_auth != CONNECTED) {
         if (write_to_client(head, client,
             "532 Need account for execute this command.\n") == FTP_ERROR)
             return FTP_ERROR;
         return FUNCTION_SUCCESS;
     }
-    if (is_a_directory(arg, true, head, client) == 1) {
+    if ((path = command_cwd_new_path(head, server, client, arg)) == NULL)
+        return FTP_ERROR;
+    if (is_a_directory(path, true, head, client) == 1) {
         free(client->current_directory);
-        client->current_directory = strdup(arg);
+        client->current_directory = path;
         if (write_to_client(head, client,
             "250 Requested file action okay, completed.\n") == FTP_ERROR)
             return FTP_ERROR;
