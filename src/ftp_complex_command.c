@@ -100,3 +100,29 @@ char *arg)
     }
     return FUNCTION_SUCCESS;
 }
+
+int command_del(data_t *head, connexion_t *server, connexion_t *client,
+char *arg)
+{
+    char *path = NULL;
+
+    if (client->is_auth != CONNECTED) {
+        if (write_to_client(head, client,
+            "532 Need account for execute this command.\n") == FTP_ERROR)
+            return FTP_ERROR;
+        return FUNCTION_SUCCESS;
+    }
+    if ((path = command_cwd_new_path(head, server, client, arg)) == NULL)
+        return FTP_ERROR;
+    if (remove(path)) {
+        if (write_to_client(head, client,
+            "550 Can't remove file.\n") == FTP_ERROR)
+            return FTP_ERROR;
+    } else {
+        if (write_to_client(head, client,
+            "250 Requested file action okay, completed.\n") == FTP_ERROR)
+            return FTP_ERROR;
+    }
+    free(path);
+    return FUNCTION_SUCCESS;
+}
