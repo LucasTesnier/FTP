@@ -33,6 +33,7 @@ typedef struct connexion_s {
     sockaddr_in_t interface;
     bool is_active;
     authentification_t is_auth;
+    char *current_directory;
 } connexion_t;
 
 typedef struct data_s {

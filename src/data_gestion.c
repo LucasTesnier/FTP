@@ -72,6 +72,7 @@ connexion_t *server_init(data_t *head)
         return NULL;
     server->is_active = true;
     server->is_auth = OFFLINE;
+    server->current_directory = head->home_path;
     return server;
 }
 

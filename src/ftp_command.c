@@ -8,18 +8,20 @@
 #include "ftp_command.h"
 #include "macro.h"
 #include "ftp_basic_command.h"
+#include "ftp_complex_command.h"
 #include "ftp_help_command.h"
 #include "utils.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-static int command_number = 4;
+static int command_number = 6;
 
 static command_t all_command[] = {
     {"QUIT", NULL, &command_quit},
     {"NOOP", NULL, &command_noop},
     {"HELP", NULL, &command_help},
+    {"PWD", NULL, &command_pwd},
     {"USER", "", &command_user},
     {"PASS", "", &command_pass}
 };
