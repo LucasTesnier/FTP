@@ -79,9 +79,8 @@ char *arg)
             return FTP_ERROR;
         return FUNCTION_SUCCESS;
     }
-    if (write_to_client(head, client,
-    "200 Command okay.\n") == FTP_ERROR)
-    return FTP_ERROR;
+    if (write_to_client(head, client, "200 Command okay.\n") == FTP_ERROR)
+        return FTP_ERROR;
     return FUNCTION_SUCCESS;
 }
 

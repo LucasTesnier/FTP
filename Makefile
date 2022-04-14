@@ -14,7 +14,8 @@ FILES	=	src/init_ftp.c				\
 			src/socket_function.c		\
 			src/utils.c					\
 			src/ftp_command.c			\
-			src/ftp_basic_command.c
+			src/ftp_basic_command.c		\
+			src/ftp_help_command.c
 
 SRC 	=	$(MAIN)		\
 			$(FILES)
@@ -27,10 +28,7 @@ CFLAGS 	= 	-Wall -Werror -I include/
 
 OBJ		=	$(SRC:.c=.o)
 
-T_FILES	=	tests/strace_data_tests.c			\
-			tests/strace_flags_tools_tests.c	\
-			tests/strace_flags_tests.c			\
-			tests/strace_init_tests.c
+T_FILES	=	tests/temp.c
 
 SRC_T	=	$(FILES)	\
 			$(T_FILES)
