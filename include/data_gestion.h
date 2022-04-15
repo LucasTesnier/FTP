@@ -28,12 +28,19 @@ typedef enum authentification_s {
     CONNECTED
 } authentification_t;
 
+typedef struct data_transfert_s {
+    SOCKET my_socket;
+    sockaddr_in_t interface;
+    bool is_active;
+} data_transfert_t;
+
 typedef struct connexion_s {
     SOCKET my_socket;
     sockaddr_in_t interface;
     bool is_active;
     authentification_t is_auth;
     char *current_directory;
+    data_transfert_t d_trans;
 } connexion_t;
 
 typedef struct data_s {

@@ -18,7 +18,7 @@ char *arg)
 {
     if (client->is_auth != CONNECTED) {
         if (write_to_client(head, client,
-            "532 Need account for execute this command.\n") == FTP_ERROR)
+            "530 Need account for execute this command.\n") == FTP_ERROR)
             return FTP_ERROR;
         return FUNCTION_SUCCESS;
     }
@@ -61,7 +61,7 @@ char *arg)
 
     if (client->is_auth != CONNECTED) {
         if (write_to_client(head, client,
-            "532 Need account for execute this command.\n") == FTP_ERROR)
+            "530 Need account for execute this command.\n") == FTP_ERROR)
             return FTP_ERROR;
         return FUNCTION_SUCCESS;
     }
@@ -84,7 +84,7 @@ char *arg)
 
     if (client->is_auth != CONNECTED) {
         if (write_to_client(head, client,
-            "532 Need account for execute this command.\n") == FTP_ERROR)
+            "530 Need account for execute this command.\n") == FTP_ERROR)
             return FTP_ERROR;
         return FUNCTION_SUCCESS;
     }
@@ -95,20 +95,20 @@ char *arg)
         free(client->current_directory);
         client->current_directory = new_path;
         if (write_to_client(head, client,
-        "200 Command okay.\n") == FTP_ERROR)
+            "200 Command okay.\n") == FTP_ERROR)
             return FTP_ERROR;
     }
     return FUNCTION_SUCCESS;
 }
 
-int command_del(data_t *head, connexion_t *server, connexion_t *client,
+int command_dele(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
     char *path = NULL;
 
     if (client->is_auth != CONNECTED) {
         if (write_to_client(head, client,
-            "532 Need account for execute this command.\n") == FTP_ERROR)
+            "530 Need account for execute this command.\n") == FTP_ERROR)
             return FTP_ERROR;
         return FUNCTION_SUCCESS;
     }

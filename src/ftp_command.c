@@ -9,15 +9,16 @@
 #include "macro.h"
 #include "ftp_basic_command.h"
 #include "ftp_complex_command.h"
+#include "ftp_data_command.h"
 #include "ftp_help_command.h"
 #include "utils.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-static int command_number = 9;
+static const int COMMAND_NUMBER = 10;
 
-static command_t all_command[] = {
+static const command_t ALL_COMMAND[] = {
     {"QUIT", NULL, &command_quit},
     {"NOOP", NULL, &command_noop},
     {"HELP", NULL, &command_help},
@@ -26,7 +27,8 @@ static command_t all_command[] = {
     {"USER", "", &command_user},
     {"PASS", "", &command_pass},
     {"CWD", "", &command_cwd},
-    {"DEL", "", &command_del}
+    {"DELE", "", &command_dele},
+    {"PORT", "", &command_port}
 };
 
 /**
@@ -104,16 +106,16 @@ int find_matching_command(command_t command)
 {
     int count = 0;
 
-    for (; count < command_number; count++)
-        if (strcmp(all_command[count].name, command.name) == 0)
+    for (; count < COMMAND_NUMBER; count++)
+        if (strcmp(ALL_COMMAND[count].name, command.name) == 0)
             break;
-    if (count == command_number)
+    if (count == COMMAND_NUMBER)
         return -1;
-    if (all_command[count].arg == NULL) {
+    if (ALL_COMMAND[count].arg == NULL) {
         if (command.arg == NULL)
             return count;
     }
-    if (all_command[count].arg != NULL) {
+    if (ALL_COMMAND[count].arg != NULL) {
         if (command.arg != NULL)
             return count;
     }
@@ -142,7 +144,7 @@ int command_traitment(connexion_t *server, connexion_t *client, data_t *head)
         if (command_invalid(head, server, client) == FTP_ERROR)
             return FTP_ERROR;
     } else {
-        if ((*all_command[matching].func)(head, server,
+        if ((*ALL_COMMAND[matching].func)(head, server,
             client, actual.arg) == FTP_ERROR)
             return FTP_ERROR;
     }

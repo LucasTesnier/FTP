@@ -36,6 +36,8 @@ char *arg)
     if (write_to_client(head, client, message) == FTP_ERROR) {
         return FTP_ERROR;
     }
+    if (client->d_trans.is_active)
+        closesocket(client->d_trans.my_socket);
     closesocket(client->my_socket);
     free(client->current_directory);
     client->is_active = false;
@@ -61,7 +63,7 @@ char *arg)
         client->is_auth = USER;
     } else {
         if (write_to_client(head, client,
-            "430 Invalid user name.\n") == FTP_ERROR)
+            "331 Invalid user name.\n") == FTP_ERROR)
             return FTP_ERROR;
     }
     return FUNCTION_SUCCESS;
@@ -112,7 +114,7 @@ char *arg)
 {
     if (client->is_auth != CONNECTED) {
         if (write_to_client(head, client,
-            "532 Need account for execute this command.\n") == FTP_ERROR)
+            "530 Need account for execute this command.\n") == FTP_ERROR)
             return FTP_ERROR;
         return FUNCTION_SUCCESS;
     }
