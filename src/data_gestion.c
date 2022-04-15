@@ -8,6 +8,7 @@
 #include "data_gestion.h"
 #include "socket_function.h"
 #include "macro.h"
+#include "utils.h"
 #include <stdlib.h>
 
 /**
@@ -75,7 +76,8 @@ connexion_t *server_init(data_t *head)
     server->is_auth = OFFLINE;
     server->current_directory = head->home_path;
     server->d_trans = (data_transfert_t) {0, create_interface(head), false};
-    return server;
+    return ((is_a_directory(head->home_path, false, NULL, NULL) ?
+    server : NULL));
 }
 
 /**
