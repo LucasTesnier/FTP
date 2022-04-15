@@ -44,7 +44,7 @@ connexion_t *client)
 {
     struct stat sb;
 
-    if (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode)) {
+    if (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode) && path[0] != '\0') {
         return A_DIRECTORY;
     } else {
         if (blocking) {

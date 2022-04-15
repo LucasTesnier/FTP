@@ -38,6 +38,8 @@ connexion_t *client, char *arg)
 
     if (path == NULL)
         return NULL;
+    if (strlen(arg) == 0)
+        return arg;
     if (arg[0] != '/') {
         path = realloc(path, strlen(arg) + strlen(path) + 2);
         if (path == NULL)
