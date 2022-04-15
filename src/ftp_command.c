@@ -57,10 +57,12 @@ int write_to_client(data_t *head, connexion_t *client, char *message)
 */
 char *read_command(connexion_t *client, data_t *head)
 {
-    char *message = malloc(sizeof(char) * 4086);
+    char *message = NULL;
+    FILE *fp = fdopen(client->my_socket, "r");
     int message_size = 0;
+    size_t temp = 0;
 
-    if ((message_size = read(client->my_socket, message, 4084))
+    if ((message_size = getline(&message, &temp, fp))
     == INVALID_SOCKET) {
         display_error("Read have failed.", head);
         return NULL;
