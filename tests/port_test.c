@@ -14,9 +14,9 @@
 #include <netdb.h>
 #include <stdlib.h>
 #include <string.h>
-#define INVALID_socket_t -1
+#define INVALID_SOCKET -1
 #define socket_t_ERROR -1
-#define CLOSE_SOCKET(s) close(s)
+#define CLOSECOKET(s) close(s)
 typedef int socket_t;
 
 
@@ -51,20 +51,20 @@ void add_in_head(node_t *head, connexion_t *connexion_to_add)
     head->size += 1;
 }
 
-socket_t create_socket_t(void)
+socket_t create_socket(void)
 {
-    socket_t new_socket_t = socket_t(AF_INET, SOCK_STREAM, 0);
+    socket_t new_socket = socket_t(AF_INET, SOCK_STREAM, 0);
 
-    if (new_socket_t == INVALID_socket_t) {
+    if (new_socket == INVALID_SOCKET) {
         fprintf(stderr, "socket_t creation have Failed.\n");
-        return INVALID_socket_t;
+        return INVALID_SOCKET;
     }
     return new_socket_t;
 }
 
 void close_socket_t(socket_t closing_sock)
 {
-    CLOSE_SOCKET(closing_sock);
+    CLOSECOKET(closing_sock);
 }
 
 sockaddr_in_t create_interface(int port)
@@ -81,14 +81,14 @@ connexion_t *create_host_connexion(int port)
 {
     connexion_t *new_connexion = malloc(sizeof(connexion_t));
 
-    new_connexion->my_socket_t = create_socket_t();
+    new_connexion->my_socket = create_socket();
     new_connexion->interface = create_interface(port);
     return new_connexion;
 }
 
 void delete_connexion(connexion_t *host_server)
 {
-    close_socket_t(host_server->my_socket_t);
+    close_socket_t(host_server->my_socket);
     free(host_server);
 }
 
@@ -124,7 +124,7 @@ connexion_t *create_client_connexion(connexion_t *host_connexion)
     connexion_t *new_connexion = malloc(sizeof(connexion_t));
     int size = sizeof new_connexion->interface;
 
-    new_connexion->my_socket_t = accept(host_connexion->my_socket_t, (sockaddr_t *)&(new_connexion->interface), &size);
+    new_connexion->my_socket = accept(host_connexion->my_socket, (sockaddr_t *)&(new_connexion->interface), &size);
     return new_connexion;
 }
 
@@ -132,7 +132,7 @@ int server_connexion(connexion_t *host_connexion, node_t *head)
 {
     connexion_t *client_connexion = create_client_connexion(host_connexion);
 
-    if (client_connexion->my_socket_t == INVALID_socket_t) {
+    if (client_connexion->my_socket == INVALID_SOCKET) {
         fprintf(stderr, "Accept have Failed.\n");
         return socket_t_ERROR;
     }
@@ -152,12 +152,12 @@ int server_loop(connexion_t *host_connexion, node_t *head, fd_set *readfs, fd_se
             char *message = malloc(sizeof(char) * 200000000);
             int message_size = 0;
 
-            if ((message_size = read(head->data[i]->my_socket_t, message, 190000000)) == INVALID_socket_t) {
+            if ((message_size = read(head->data[i]->my_socket, message, 190000000)) == INVALID_SOCKET) {
                 fprintf(stderr, "Read have failed.\n");
                 return socket_t_ERROR;
             }
             message[message_size] = '\0';
-            if (write_to_client(head->data[i]->my_socket_t, message))
+            if (write_to_client(head->data[i]->my_socket, message))
                 return socket_t_ERROR;
             printf("%s\n", message);
     }
@@ -171,11 +171,11 @@ int server(int port)
     fd_set readfs;
     fd_set writefs;
 
-    if (host_connexion->my_socket_t == INVALID_socket_t)
-        return INVALID_socket_t;
-    if (binding_interface(host_connexion->my_socket_t, &(host_connexion->interface)))
+    if (host_connexion->my_socket == INVALID_SOCKET)
+        return INVALID_SOCKET;
+    if (binding_interface(host_connexion->my_socket, &(host_connexion->interface)))
         return socket_t_ERROR;
-    if (set_queue_limit(host_connexion->my_socket_t, 5))
+    if (set_queue_limit(host_connexion->my_socket, 5))
         return socket_t_ERROR;
     while (1) {
         if (server_loop(host_connexion, head, &readfs, &writefs))

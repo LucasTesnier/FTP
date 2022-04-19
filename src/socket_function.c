@@ -19,13 +19,13 @@
 *@param head
 *@return socket_t
 */
-socket_t create_socket_t(data_t *head)
+socket_t create_socket(data_t *head)
 {
     socket_t new_socket_t = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (new_socket_t == INVALID_socket_t) {
+    if (new_socket_t == INVALID_SOCKET) {
         display_error("socket_t creation have Failed.\n", head);
-        return INVALID_socket_t;
+        return INVALID_SOCKET;
     }
     return new_socket_t;
 }
@@ -57,7 +57,7 @@ int binding_interface(connexion_t *server, data_t *head)
 {
     sockaddr_in_t *temp = &(server->interface);
 
-    if (bind(server->my_socket_t, (sockaddr_t *)temp, sizeof *temp) ==
+    if (bind(server->my_socket, (sockaddr_t *)temp, sizeof *temp) ==
     INVALID_INTERFACE) {
         display_error("Bind have failed. Port already taken.", head);
         return INVALID_INTERFACE;
@@ -74,11 +74,11 @@ int binding_interface(connexion_t *server, data_t *head)
 */
 int set_queue_limit(connexion_t *server, data_t *head)
 {
-    if (listen(server->my_socket_t, 5) == INVALID_socket_t) {
+    if (listen(server->my_socket, 5) == INVALID_SOCKET) {
         display_error("Listen have Failed.", head);
-        CLOSE_SOCKET(server->my_socket_t);
+        CLOSECOKET(server->my_socket);
         free(server);
-        return INVALID_socket_t;
+        return INVALID_SOCKET;
     }
     return FUNCTION_SUCCESS;
 }
@@ -97,9 +97,9 @@ int server_connexion(connexion_t *server, data_t *head)
 
     if (client == NULL)
         return SERVER_ERROR;
-    client->my_socket_t = accept(server->my_socket_t,
+    client->my_socket = accept(server->my_socket,
     (sockaddr_t *)&(client->interface), &size);
-    if (client->my_socket_t == INVALID_socket_t) {
+    if (client->my_socket == INVALID_SOCKET) {
         display_error("Accept have Failed.", head);
         return SERVER_ERROR;
     }

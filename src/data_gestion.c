@@ -38,9 +38,9 @@ void destroy_data(data_t *head)
 {
     for (int i = 0; i < head->size; i++) {
         if (head->data[i]->is_active && head->data[i]->d_trans.is_active)
-            CLOSE_SOCKET(head->data[i]->d_trans.my_socket_t);
+            CLOSECOKET(head->data[i]->d_trans.my_socket);
         if (head->data[i]->is_active) {
-            CLOSE_SOCKET(head->data[i]->my_socket_t);
+            CLOSECOKET(head->data[i]->my_socket);
             free(head->data[i]->current_directory);
         }
         free(head->data[i]);
@@ -61,12 +61,12 @@ connexion_t *server_init(data_t *head)
 
     if (server == NULL)
         return NULL;
-    server->my_socket_t = create_socket_t(head);
-    if (server->my_socket_t == INVALID_socket_t)
+    server->my_socket = create_socket(head);
+    if (server->my_socket == INVALID_SOCKET)
         return NULL;
     server->interface = create_interface(head);
     if (binding_interface(server, head) == INVALID_INTERFACE) {
-        CLOSE_SOCKET(server->my_socket_t);
+        CLOSECOKET(server->my_socket);
         free(server);
         return NULL;
     }
@@ -87,7 +87,7 @@ connexion_t *server_init(data_t *head)
 */
 void destroy_server(connexion_t *server)
 {
-    CLOSE_SOCKET(server->my_socket_t);
+    CLOSECOKET(server->my_socket);
     free(server);
 }
 

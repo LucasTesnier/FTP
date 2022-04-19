@@ -10,7 +10,7 @@
 
     #include "data_gestion.h"
 
-socket_t create_socket_t(data_t *head);
+socket_t create_socket(data_t *head);
 sockaddr_in_t create_interface(data_t *head);
 int binding_interface(connexion_t *server, data_t *head);
 int set_queue_limit(connexion_t *server, data_t *head);

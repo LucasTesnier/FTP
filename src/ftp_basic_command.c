@@ -37,8 +37,8 @@ char *arg)
         return FTP_ERROR;
     }
     if (client->d_trans.is_active)
-        CLOSE_SOCKET(client->d_trans.my_socket_t);
-    CLOSE_SOCKET(client->my_socket_t);
+        CLOSECOKET(client->d_trans.my_socket);
+    CLOSECOKET(client->my_socket);
     free(client->current_directory);
     client->is_active = false;
     return FUNCTION_SUCCESS;

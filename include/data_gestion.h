@@ -15,7 +15,7 @@
     #include <arpa/inet.h>
     #include <unistd.h>
 
-    #define CLOSE_SOCKET(s) close(s)
+    #define CLOSECOKET(s) close(s)
 
 typedef int socket_t;
 
@@ -29,13 +29,13 @@ typedef enum authentification_s {
 } authentification_t;
 
 typedef struct data_transfert_s {
-    socket_t my_socket_t;
+    socket_t my_socket;
     sockaddr_in_t interface;
     bool is_active;
 } data_transfert_t;
 
 typedef struct connexion_s {
-    socket_t my_socket_t;
+    socket_t my_socket;
     sockaddr_in_t interface;
     bool is_active;
     authentification_t is_auth;
