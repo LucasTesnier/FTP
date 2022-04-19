@@ -37,8 +37,8 @@ char *arg)
         return FTP_ERROR;
     }
     if (client->d_trans.is_active)
-        closesocket(client->d_trans.my_socket);
-    closesocket(client->my_socket);
+        CLOSE_SOCKET(client->d_trans.my_socket_t);
+    CLOSE_SOCKET(client->my_socket_t);
     free(client->current_directory);
     client->is_active = false;
     return FUNCTION_SUCCESS;
@@ -83,7 +83,7 @@ char *arg)
 {
     if (client->is_auth != USER) {
         if (write_to_client(head, client,
-            "332 Need account for login.\n") == FTP_ERROR)
+            "530 Need account for login.\n") == FTP_ERROR)
             return FTP_ERROR;
         return FUNCTION_SUCCESS;
     }

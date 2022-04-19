@@ -6,7 +6,7 @@
 */
 
 #include <sys/types.h>
-#include <sys/socket.h>
+#include <sys/socket_t.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -14,17 +14,17 @@
 #include <netdb.h>
 #include <stdlib.h>
 #include <string.h>
-#define INVALID_SOCKET -1
-#define SOCKET_ERROR -1
-#define closesocket(s) close(s)
-typedef int SOCKET;
+#define INVALID_socket_t -1
+#define socket_t_ERROR -1
+#define CLOSE_SOCKET(s) close(s)
+typedef int socket_t;
 
 
 typedef struct sockaddr_in sockaddr_in_t;
 typedef struct sockaddr sockaddr_t;
 
 typedef struct connexion_s {
-    SOCKET my_socket;
+    socket_t my_socket_t;
     sockaddr_in_t interface;
 } connexion_t;
 
@@ -51,20 +51,20 @@ void add_in_head(node_t *head, connexion_t *connexion_to_add)
     head->size += 1;
 }
 
-SOCKET create_socket(void)
+socket_t create_socket_t(void)
 {
-    SOCKET new_socket = socket(AF_INET, SOCK_STREAM, 0);
+    socket_t new_socket_t = socket_t(AF_INET, SOCK_STREAM, 0);
 
-    if (new_socket == INVALID_SOCKET) {
-        fprintf(stderr, "Socket creation have Failed.\n");
-        return INVALID_SOCKET;
+    if (new_socket_t == INVALID_socket_t) {
+        fprintf(stderr, "socket_t creation have Failed.\n");
+        return INVALID_socket_t;
     }
-    return new_socket;
+    return new_socket_t;
 }
 
-void close_socket(SOCKET closing_sock)
+void close_socket_t(socket_t closing_sock)
 {
-    closesocket(closing_sock);
+    CLOSE_SOCKET(closing_sock);
 }
 
 sockaddr_in_t create_interface(int port)
@@ -81,40 +81,40 @@ connexion_t *create_host_connexion(int port)
 {
     connexion_t *new_connexion = malloc(sizeof(connexion_t));
 
-    new_connexion->my_socket = create_socket();
+    new_connexion->my_socket_t = create_socket_t();
     new_connexion->interface = create_interface(port);
     return new_connexion;
 }
 
 void delete_connexion(connexion_t *host_server)
 {
-    close_socket(host_server->my_socket);
+    close_socket_t(host_server->my_socket_t);
     free(host_server);
 }
 
-int binding_interface(SOCKET my_socket, sockaddr_in_t *interface)
+int binding_interface(socket_t my_socket_t, sockaddr_in_t *interface)
 {
-    if (bind(my_socket, (sockaddr_t *)interface, sizeof *interface) == SOCKET_ERROR) {
+    if (bind(my_socket_t, (sockaddr_t *)interface, sizeof *interface) == socket_t_ERROR) {
         fprintf(stderr, "Bind have Failed.\n");
-        return SOCKET_ERROR;
+        return socket_t_ERROR;
     }
     return 0;
 }
 
-int set_queue_limit(SOCKET my_socket, int limit)
+int set_queue_limit(socket_t my_socket_t, int limit)
 {
-    if (listen(my_socket, limit) == SOCKET_ERROR) {
+    if (listen(my_socket_t, limit) == socket_t_ERROR) {
         fprintf(stderr, "Listen have Failed.\n");
-        return SOCKET_ERROR;
+        return socket_t_ERROR;
     }
     return 0;
 }
 
-int write_to_client(SOCKET client_socket, const char *message)
+int write_to_client(socket_t client_socket_t, const char *message)
 {
-    if (write(client_socket, message, strlen(message)) == SOCKET_ERROR) {
+    if (write(client_socket_t, message, strlen(message)) == socket_t_ERROR) {
         fprintf(stderr, "Write have Failed.\n");
-        return SOCKET_ERROR;
+        return socket_t_ERROR;
     }
     return 0;
 }
@@ -124,7 +124,7 @@ connexion_t *create_client_connexion(connexion_t *host_connexion)
     connexion_t *new_connexion = malloc(sizeof(connexion_t));
     int size = sizeof new_connexion->interface;
 
-    new_connexion->my_socket = accept(host_connexion->my_socket, (sockaddr_t *)&(new_connexion->interface), &size);
+    new_connexion->my_socket_t = accept(host_connexion->my_socket_t, (sockaddr_t *)&(new_connexion->interface), &size);
     return new_connexion;
 }
 
@@ -132,9 +132,9 @@ int server_connexion(connexion_t *host_connexion, node_t *head)
 {
     connexion_t *client_connexion = create_client_connexion(host_connexion);
 
-    if (client_connexion->my_socket == INVALID_SOCKET) {
+    if (client_connexion->my_socket_t == INVALID_socket_t) {
         fprintf(stderr, "Accept have Failed.\n");
-        return SOCKET_ERROR;
+        return socket_t_ERROR;
     }
     add_in_head(head, client_connexion);
     printf("CONNECTED.\n");
@@ -146,19 +146,19 @@ int server_connexion(connexion_t *host_connexion, node_t *head)
 int server_loop(connexion_t *host_connexion, node_t *head, fd_set *readfs, fd_set *writefs)
 {
     if (head->size == 0 && server_connexion(host_connexion, head))
-        return SOCKET_ERROR;
+        return socket_t_ERROR;
 
     for (int i = 0; i < head->size; i++) {
             char *message = malloc(sizeof(char) * 200000000);
             int message_size = 0;
 
-            if ((message_size = read(head->data[i]->my_socket, message, 190000000)) == INVALID_SOCKET) {
+            if ((message_size = read(head->data[i]->my_socket_t, message, 190000000)) == INVALID_socket_t) {
                 fprintf(stderr, "Read have failed.\n");
-                return SOCKET_ERROR;
+                return socket_t_ERROR;
             }
             message[message_size] = '\0';
-            if (write_to_client(head->data[i]->my_socket, message))
-                return SOCKET_ERROR;
+            if (write_to_client(head->data[i]->my_socket_t, message))
+                return socket_t_ERROR;
             printf("%s\n", message);
     }
     return 0;
@@ -171,15 +171,15 @@ int server(int port)
     fd_set readfs;
     fd_set writefs;
 
-    if (host_connexion->my_socket == INVALID_SOCKET)
-        return INVALID_SOCKET;
-    if (binding_interface(host_connexion->my_socket, &(host_connexion->interface)))
-        return SOCKET_ERROR;
-    if (set_queue_limit(host_connexion->my_socket, 5))
-        return SOCKET_ERROR;
+    if (host_connexion->my_socket_t == INVALID_socket_t)
+        return INVALID_socket_t;
+    if (binding_interface(host_connexion->my_socket_t, &(host_connexion->interface)))
+        return socket_t_ERROR;
+    if (set_queue_limit(host_connexion->my_socket_t, 5))
+        return socket_t_ERROR;
     while (1) {
         if (server_loop(host_connexion, head, &readfs, &writefs))
-            return SOCKET_ERROR;
+            return socket_t_ERROR;
     }
     delete_connexion(host_connexion);
 }
@@ -193,4 +193,4 @@ int main(int ac, char **av)
 }
 
 
-/// FAIRE UNE LISTE CHAINE DE CONNEXION_T -> IMPLEMENTER SELECT https://broux.developpez.com/articles/c/sockets/
+/// FAIRE UNE LISTE CHAINE DE CONNEXION_T -> IMPLEMENTER SELECT https://broux.developpez.com/articles/c/socket_ts/

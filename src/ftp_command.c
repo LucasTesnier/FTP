@@ -32,7 +32,7 @@ static const command_t ALL_COMMAND[] = {
 };
 
 /**
-*@brief write a message to the client socket
+*@brief write a message to the client socket_t
 *
 *@param head
 *@param client
@@ -41,7 +41,7 @@ static const command_t ALL_COMMAND[] = {
 */
 int write_to_client(data_t *head, connexion_t *client, char *message)
 {
-    if (write(client->my_socket, message, strlen(message)) == FTP_ERROR) {
+    if (write(client->my_socket_t, message, strlen(message)) == FTP_ERROR) {
         display_error("Write have Failed.", head);
         return FTP_ERROR;
     }
@@ -49,7 +49,7 @@ int write_to_client(data_t *head, connexion_t *client, char *message)
 }
 
 /**
-*@brief read a message from the client socket
+*@brief read a message from the client socket_t
 *
 *@param client
 *@param head
@@ -58,12 +58,12 @@ int write_to_client(data_t *head, connexion_t *client, char *message)
 char *read_command(connexion_t *client, data_t *head)
 {
     char *message = NULL;
-    FILE *fp = fdopen(client->my_socket, "r");
+    FILE *fp = fdopen(client->my_socket_t, "r");
     int message_size = 0;
     size_t temp = 0;
 
     if ((message_size = getline(&message, &temp, fp))
-    == INVALID_SOCKET) {
+    == INVALID_socket_t) {
         display_error("Read have failed.", head);
         return NULL;
     }
@@ -118,7 +118,7 @@ int find_matching_command(command_t command)
             return count;
     }
     if (ALL_COMMAND[count].arg != NULL) {
-        if (command.arg != NULL)
+        if (command.arg != NULL || !strcmp(ALL_COMMAND[count].name, "CWD"))
             return count;
     }
     return -1;

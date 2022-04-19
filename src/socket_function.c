@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2022
 ** Project
 ** File description:
-** socket_function
+** socket_t_function
 */
 
 #include "socket_function.h"
@@ -14,20 +14,20 @@
 #include <string.h>
 
 /**
-*@brief Create a socket object
+*@brief Create a socket_t object
 *
 *@param head
-*@return SOCKET
+*@return socket_t
 */
-SOCKET create_socket(data_t *head)
+socket_t create_socket_t(data_t *head)
 {
-    SOCKET new_socket = socket(AF_INET, SOCK_STREAM, 0);
+    socket_t new_socket_t = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (new_socket == INVALID_SOCKET) {
-        display_error("Socket creation have Failed.\n", head);
-        return INVALID_SOCKET;
+    if (new_socket_t == INVALID_socket_t) {
+        display_error("socket_t creation have Failed.\n", head);
+        return INVALID_socket_t;
     }
-    return new_socket;
+    return new_socket_t;
 }
 
 /**
@@ -47,7 +47,7 @@ sockaddr_in_t create_interface(data_t *head)
 }
 
 /**
-*@brief bind an interface with is socket
+*@brief bind an interface with is socket_t
 *
 *@param server
 *@param head
@@ -57,7 +57,7 @@ int binding_interface(connexion_t *server, data_t *head)
 {
     sockaddr_in_t *temp = &(server->interface);
 
-    if (bind(server->my_socket, (sockaddr_t *)temp, sizeof *temp) ==
+    if (bind(server->my_socket_t, (sockaddr_t *)temp, sizeof *temp) ==
     INVALID_INTERFACE) {
         display_error("Bind have failed. Port already taken.", head);
         return INVALID_INTERFACE;
@@ -74,11 +74,11 @@ int binding_interface(connexion_t *server, data_t *head)
 */
 int set_queue_limit(connexion_t *server, data_t *head)
 {
-    if (listen(server->my_socket, 5) == INVALID_SOCKET) {
+    if (listen(server->my_socket_t, 5) == INVALID_socket_t) {
         display_error("Listen have Failed.", head);
-        closesocket(server->my_socket);
+        CLOSE_SOCKET(server->my_socket_t);
         free(server);
-        return INVALID_SOCKET;
+        return INVALID_socket_t;
     }
     return FUNCTION_SUCCESS;
 }
@@ -97,9 +97,9 @@ int server_connexion(connexion_t *server, data_t *head)
 
     if (client == NULL)
         return SERVER_ERROR;
-    client->my_socket = accept(server->my_socket,
+    client->my_socket_t = accept(server->my_socket_t,
     (sockaddr_t *)&(client->interface), &size);
-    if (client->my_socket == INVALID_SOCKET) {
+    if (client->my_socket_t == INVALID_socket_t) {
         display_error("Accept have Failed.", head);
         return SERVER_ERROR;
     }

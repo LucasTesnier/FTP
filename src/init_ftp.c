@@ -68,12 +68,12 @@ int readfs_traitment(connexion_t *server, data_t *head, fd_set *readfs)
 {
     int return_value = FUNCTION_SUCCESS;
 
-    if (FD_ISSET(server->my_socket, readfs) &&
+    if (FD_ISSET(server->my_socket_t, readfs) &&
         server_connexion(server, head) < 0)
         return SERVER_ERROR;
     for (int i = 0; i < head->size; i++) {
         if (head->data[i]->is_active &&
-            FD_ISSET(head->data[i]->my_socket, readfs))
+            FD_ISSET(head->data[i]->my_socket_t, readfs))
             return_value = command_traitment(server, head->data[i], head);
         if (return_value == SERVER_ERROR)
             return SERVER_ERROR;
@@ -91,16 +91,16 @@ int readfs_traitment(connexion_t *server, data_t *head, fd_set *readfs)
 int server_loop(connexion_t *server, data_t *head)
 {
     fd_set readfs;
-    SOCKET max = 0;
+    socket_t max = 0;
 
     while (running) {
         FD_ZERO(&readfs);
-        FD_SET(server->my_socket, &readfs);
+        FD_SET(server->my_socket_t, &readfs);
         for (int i = 0; i < head->size; i++)
             if (head->data[i]->is_active)
-                FD_SET(head->data[i]->my_socket, &readfs);
-        max = ((head->size > 0) ? head->data[head->size - 1]->my_socket : \
-        server->my_socket);
+                FD_SET(head->data[i]->my_socket_t, &readfs);
+        max = ((head->size > 0) ? head->data[head->size - 1]->my_socket_t : \
+        server->my_socket_t);
         if (select(max + 1, &readfs, NULL, NULL, NULL) < 0 && running == 1) {
             display_error("Select have failed.", head);
             return SERVER_ERROR;
