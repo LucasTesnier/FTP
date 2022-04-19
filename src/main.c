@@ -7,6 +7,8 @@
 
 #include "init_ftp.h"
 #include "macro.h"
+#include "host_parsing.h"
+#include <stdio.h>
 
 /**
 *@brief main function
