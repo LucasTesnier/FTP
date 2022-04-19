@@ -18,7 +18,8 @@ FILES	=	src/init_ftp.c				\
 			src/ftp_help_command.c		\
 			src/ftp_complex_command.c	\
 			src/ftp_data_command.c		\
-			src/host_parsing.c
+			src/host_parsing.c			\
+			src/ftp_file_command.c
 
 SRC 	=	$(MAIN)		\
 			$(FILES)

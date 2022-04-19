@@ -47,13 +47,22 @@ connexion_t *client)
     if (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode) && path[0] != '\0') {
         return A_DIRECTORY;
     } else {
-        if (blocking) {
-            if (write_to_client(head, client,
-            "550 File is not a directory.\n") == FTP_ERROR)
-            return FTP_ERROR;
-        }
+        if (blocking)
+            write_to_client(head, client, "550 File is not a directory.\n");
         return NOT_A_DIRECTORY;
     }
+}
+
+int is_a_file(char *path, data_t *head, connexion_t *client)
+{
+    FILE *temp = fopen(path, "rb");
+
+    if (temp == NULL) {
+        write_to_client(head, client, "550 File is not a readable.\n");
+        return NOT_A_DIRECTORY;
+    }
+    fclose(temp);
+    return A_DIRECTORY;
 }
 
 char *go_back_path(char *path, data_t *head, connexion_t *client)

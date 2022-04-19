@@ -11,12 +11,13 @@
 #include "ftp_complex_command.h"
 #include "ftp_data_command.h"
 #include "ftp_help_command.h"
+#include "ftp_file_command.h"
 #include "utils.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-static const int COMMAND_NUMBER = 10;
+static const int COMMAND_NUMBER = 11;
 
 static const command_t ALL_COMMAND[] = {
     {"QUIT", NULL, &command_quit},
@@ -28,7 +29,8 @@ static const command_t ALL_COMMAND[] = {
     {"PASS", "", &command_pass},
     {"CWD", "", &command_cwd},
     {"DELE", "", &command_dele},
-    {"PORT", "", &command_port}
+    {"PORT", "", &command_port},
+    {"RETR", "", &command_retr}
 };
 
 /**
