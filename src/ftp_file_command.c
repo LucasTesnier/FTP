@@ -15,6 +15,14 @@
 #include <stdio.h>
 #include <string.h>
 
+/**
+*@brief send the content of a file to the data socket
+*
+*@param head
+*@param server
+*@param client
+*@param path
+*/
 void send_file_with_data(data_t *head, connexion_t *server,
 connexion_t *client, char *path)
 {
@@ -37,6 +45,15 @@ connexion_t *client, char *path)
     client->d_trans.is_active = false;
 }
 
+/**
+*@brief execute the retr command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_retr(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
@@ -61,6 +78,14 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief Get the file with data object
+*
+*@param head
+*@param server
+*@param client
+*@param path
+*/
 void get_file_with_data(data_t *head, connexion_t *server, connexion_t *client,
 char *path)
 {
@@ -84,6 +109,15 @@ char *path)
     client->d_trans.is_active = false;
 }
 
+/**
+*@brief execute the stor command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_stor(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {

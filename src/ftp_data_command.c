@@ -22,6 +22,15 @@
 #include <stdio.h>
 #include <netdb.h>
 
+/**
+*@brief hold the host connection process for ACTIVE and PASSIVE
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int connect_to_host(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
@@ -45,6 +54,15 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief execute the port command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_port(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
@@ -70,6 +88,12 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief Get the file content object
+*
+*@param path
+*@return char*
+*/
 char *get_file_content(char *path)
 {
     char *buffer = NULL;
@@ -88,6 +112,13 @@ char *get_file_content(char *path)
     return buffer;
 }
 
+/**
+*@brief Get the file from data object
+*
+*@param client
+*@param head
+*@return char*
+*/
 char *get_file_from_data(connexion_t *client, data_t *head)
 {
     char *message = NULL;

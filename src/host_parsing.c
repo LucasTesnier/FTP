@@ -9,6 +9,13 @@
 #include <string.h>
 #include <stdio.h>
 
+/**
+*@brief Get the line from host and port object
+*
+*@param host
+*@param port
+*@return char*
+*/
 char *get_line_from_host_and_port(char *host, int port)
 {
     char *line = malloc(sizeof(char) * (strlen(host) + 10));
@@ -24,6 +31,14 @@ char *get_line_from_host_and_port(char *host, int port)
     return line;
 }
 
+/**
+*@brief Get the port from line object
+*
+*@param line
+*@param port
+*@param pos
+*@return int
+*/
 int get_port_from_line(char *line, int *port, int pos)
 {
     char *endPtr = NULL;
@@ -40,6 +55,14 @@ int get_port_from_line(char *line, int *port, int pos)
     return SUCCESS;
 }
 
+/**
+*@brief Get the host and port from line object
+*
+*@param line
+*@param host
+*@param port
+*@return int
+*/
 int get_host_and_port_from_line(char *line, char *host, int *port)
 {
     int count = 0;

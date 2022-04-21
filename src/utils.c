@@ -39,6 +39,15 @@ void display_error(char *str, data_t *head)
     destroy_data(head);
 }
 
+/**
+*@brief check if the path is a directory
+*
+*@param path
+*@param blocking
+*@param head
+*@param client
+*@return int
+*/
 int is_a_directory(char *path, bool blocking, data_t *head,
 connexion_t *client)
 {
@@ -53,6 +62,14 @@ connexion_t *client)
     }
 }
 
+/**
+*@brief check if the path is a file
+*
+*@param path
+*@param head
+*@param client
+*@return int
+*/
 int is_a_file(char *path, data_t *head, connexion_t *client)
 {
     FILE *temp = fopen(path, "rb");
@@ -65,6 +82,14 @@ int is_a_file(char *path, data_t *head, connexion_t *client)
     return A_DIRECTORY;
 }
 
+/**
+*@brief hold the ../ process
+*
+*@param path
+*@param head
+*@param client
+*@return char*
+*/
 char *go_back_path(char *path, data_t *head, connexion_t *client)
 {
     char *new_path = strdup(path);

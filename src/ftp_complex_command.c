@@ -13,6 +13,15 @@
 #include <stdio.h>
 #include <string.h>
 
+/**
+*@brief execute the pwd command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_pwd(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
@@ -31,6 +40,15 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief transform the path args to the relative one
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return char*
+*/
 char *command_cwd_new_path(data_t *head, connexion_t *server,
 connexion_t *client, char *arg)
 {
@@ -56,6 +74,15 @@ connexion_t *client, char *arg)
     return path;
 }
 
+/**
+*@brief execute the cwd command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_cwd(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
@@ -79,6 +106,15 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief execute command cdup
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_cdup(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
@@ -103,6 +139,15 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+/**
+*@brief execute the del command
+*
+*@param head
+*@param server
+*@param client
+*@param arg
+*@return int
+*/
 int command_dele(data_t *head, connexion_t *server, connexion_t *client,
 char *arg)
 {
