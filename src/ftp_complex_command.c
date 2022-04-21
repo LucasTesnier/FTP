@@ -118,11 +118,11 @@ char *arg)
         return FTP_ERROR;
     if (remove(path)) {
         if (write_to_client(head, client,
-            "550 Can't remove file.\n") == FTP_ERROR)
+        "550 Can't remove file.\n") == FTP_ERROR)
             return FTP_ERROR;
     } else {
         if (write_to_client(head, client,
-            "250 Requested file action okay, completed.\n") == FTP_ERROR)
+        "250 Requested file action okay, completed.\n") == FTP_ERROR)
             return FTP_ERROR;
     }
     free(path);

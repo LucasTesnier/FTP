@@ -8,29 +8,12 @@
 #include "ftp_file_command.h"
 #include "ftp_complex_command.h"
 #include "ftp_command.h"
+#include "ftp_data_command.h"
 #include "macro.h"
 #include "utils.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-char *get_file_content(char *path)
-{
-    char *buffer = NULL;
-    long length = 0;
-    FILE *file = fopen(path, "rb");
-
-    fseek(file, 0, SEEK_END);
-    length = ftell(file);
-    fseek(file, 0, SEEK_SET);
-    buffer = malloc(sizeof(char) * (length + 1));
-    if (buffer == NULL)
-        return NULL;
-    fread(buffer, 1, length, file);
-    buffer[length] = '\0';
-    fclose(file);
-    return buffer;
-}
 
 void send_file_with_data(data_t *head, connexion_t *server,
 connexion_t *client, char *path)
@@ -74,6 +57,52 @@ char *arg)
         return FTP_ERROR;
     if (is_a_file(path, head, client))
         send_file_with_data(head, server, client, path);
+    free(path);
+    return FUNCTION_SUCCESS;
+}
+
+void get_file_with_data(data_t *head, connexion_t *server, connexion_t *client,
+char *path)
+{
+    int pid = fork();
+    char *content = NULL;
+    FILE *fptr = NULL;
+
+    if (pid == 0) {
+        write_to_client(head, client, "150 File status okay.\n");
+        content = get_file_from_data(client, head);
+        if (content != NULL && (fptr = fopen(path, "w")) != NULL) {
+            fprintf(fptr, "%s", content);
+            fclose(fptr);
+            write_to_client(head, client, "226 Closing data connection.\n");
+        } else
+            write_to_client(head, client, "550 Cannot create file.\n");
+        CLOSECOKET(client->d_trans.my_socket);
+        free(content);
+        exit(0);
+    }
+    client->d_trans.is_active = false;
+}
+
+int command_stor(data_t *head, connexion_t *server, connexion_t *client,
+char *arg)
+{
+    char *path = NULL;
+
+    if (client->is_auth != CONNECTED) {
+        if (write_to_client(head, client,
+        "530 Need account for execute this command.\n") == FTP_ERROR)
+            return FTP_ERROR;
+        return FUNCTION_SUCCESS;
+    }
+    if (!client->d_trans.is_active) {
+        write_to_client(head, client,
+        "550 Need Data socket before execute command.\n");
+        return FUNCTION_SUCCESS;
+    }
+    if ((path = command_cwd_new_path(head, server, client, arg)) == NULL)
+        return FTP_ERROR;
+    get_file_with_data(head, server, client, path);
     free(path);
     return FUNCTION_SUCCESS;
 }

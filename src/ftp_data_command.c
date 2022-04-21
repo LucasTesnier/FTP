@@ -69,3 +69,37 @@ char *arg)
     write_to_client(head, client, "200 Command okay.\n");
     return FUNCTION_SUCCESS;
 }
+
+char *get_file_content(char *path)
+{
+    char *buffer = NULL;
+    long length = 0;
+    FILE *file = fopen(path, "rb");
+
+    fseek(file, 0, SEEK_END);
+    length = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    buffer = malloc(sizeof(char) * (length + 1));
+    if (buffer == NULL)
+        return NULL;
+    fread(buffer, 1, length, file);
+    buffer[length] = '\0';
+    fclose(file);
+    return buffer;
+}
+
+char *get_file_from_data(connexion_t *client, data_t *head)
+{
+    char *message = NULL;
+    FILE *fp = fdopen(client->d_trans.my_socket, "r");
+    int message_size = 0;
+    size_t temp = 0;
+
+    if ((message_size = getline(&message, &temp, fp))
+    == INVALID_SOCKET) {
+        write_to_client(head, client, "550 Cannot read data.\n");
+        return NULL;
+    }
+    message[message_size] = '\0';
+    return message;
+}

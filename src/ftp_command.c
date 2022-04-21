@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static const int COMMAND_NUMBER = 11;
+static const int COMMAND_NUMBER = 12;
 
 static const command_t ALL_COMMAND[] = {
     {"QUIT", NULL, &command_quit},
@@ -30,7 +30,8 @@ static const command_t ALL_COMMAND[] = {
     {"CWD", "", &command_cwd},
     {"DELE", "", &command_dele},
     {"PORT", "", &command_port},
-    {"RETR", "", &command_retr}
+    {"RETR", "", &command_retr},
+    {"STOR", "", &command_stor}
 };
 
 /**
