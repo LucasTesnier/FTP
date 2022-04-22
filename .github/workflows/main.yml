@@ -47,7 +47,7 @@ jobs:
           fetch-depth: 0
       - run: sudo dnf install doxygen
         timeout-minutes: 5
-      - run: doxygen doc/doxyfile
+      - run: doxygen tests/doc/doxyfile
         timeout-minutes: 5
 
   push_to_mirror:
