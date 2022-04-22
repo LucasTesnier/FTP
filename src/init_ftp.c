@@ -15,7 +15,7 @@
 #include "utils.h"
 #include <signal.h>
 
-static volatile int running = 1;
+static int running = 1;
 
 /**
 *@brief init the signal catcher function
@@ -99,7 +99,7 @@ int server_loop(connexion_t *server, data_t *head)
         for (int i = 0; i < head->size; i++)
             if (head->data[i]->is_active)
                 FD_SET(head->data[i]->my_socket, &readfs);
-        max = ((head->size > 0) ? head->data[head->size - 1]->my_socket : \
+        max = ((head->size > 0) ? head->data[head->size - 1]->my_socket :
         server->my_socket);
         if (select(max + 1, &readfs, NULL, NULL, NULL) < 0 && running == 1) {
             display_error("Select have failed.", head);

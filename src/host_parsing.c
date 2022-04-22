@@ -42,7 +42,7 @@ char *get_line_from_host_and_port(char *host, int port)
 int get_port_from_line(char *line, int *port, int pos)
 {
     char *endPtr = NULL;
-    int first = strtol(line + pos - 1, &endPtr, 10);
+    int first = strtol(line + pos - 2, &endPtr, 10);
     int second = 0;
 
     if (line == endPtr)
