@@ -46,7 +46,7 @@ jobs:
         with:
           fetch-depth: 0
       - run: sudo dnf install doxygen
-        tiemout-minutes: 5
+        timeout-minutes: 5
       - run: doxygen doc/doxyfile
         timeout-minutes: 5
 

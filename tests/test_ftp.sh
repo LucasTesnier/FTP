@@ -108,6 +108,7 @@ test00()
 
   local cmd1="USER $USERNAME"
   local cmd2="PASS $PASS"
+  local cmd3="NOOP"
 
   launch_client $HOST $PORT
   if [[ ! $? -eq 1 ]]; then
@@ -116,8 +117,19 @@ test00()
     return
   fi
 
+  launch_test "Basic Command" "$cmd3" 530
   launch_test "$test_name" "$cmd1" 331
   launch_test "$test_name" "$cmd2" 230
+  launch_test "Basic Command" "$cmd3" 200
+  launch_test "Basic Command" "azdz" 500
+  launch_test "Complex Command" "PWD" 257
+  launch_test "Complex Command" "CWD" 550
+  launch_test "Complex Command" "CWD aaaa" 550
+  launch_test "Complex Command" "CWD delivery" 250
+  launch_test "Complex Command" "CWD /home" 250
+  launch_test "Complex Command" "CDUP" 200
+  launch_test "Complex Command" "DELE aaaaaa" 550
+  launch_test "Basic Command" "QUIT" 221
 
   print_succeeded "$test_name"
   return
