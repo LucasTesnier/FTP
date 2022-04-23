@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static const int COMMAND_NUMBER = 13;
+static const int COMMAND_NUMBER = 14;
 
 static const command_t ALL_COMMAND[] = {
     {"QUIT", NULL, &command_quit},
@@ -32,7 +32,8 @@ static const command_t ALL_COMMAND[] = {
     {"DELE", "", &command_dele},
     {"PORT", "", &command_port},
     {"RETR", "", &command_retr},
-    {"STOR", "", &command_stor}
+    {"STOR", "", &command_stor},
+    {"LIST", "", &command_list}
 };
 
 /**
@@ -122,7 +123,8 @@ int find_matching_command(command_t command)
             return count;
     }
     if (ALL_COMMAND[count].arg != NULL) {
-        if (command.arg != NULL || !strcmp(ALL_COMMAND[count].name, "CWD"))
+        if (command.arg != NULL || !strcmp(ALL_COMMAND[count].name, "CWD") ||
+            !strcmp(ALL_COMMAND[count].name, "LIST"))
             return count;
     }
     return -1;
