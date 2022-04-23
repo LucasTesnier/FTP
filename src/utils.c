@@ -95,7 +95,6 @@ char *go_back_path(char *path, data_t *head, connexion_t *client)
     char *new_path = strdup(path);
     int count = 0;
     int coun = 0;
-
     for (int i = 0; i < strlen(new_path); i++)
         if (new_path[i] == '/')
             count++;

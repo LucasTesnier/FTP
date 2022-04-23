@@ -124,7 +124,7 @@ char *arg)
 }
 
 /**
-*@brief In case of invalid / unknown command 
+*@brief In case of invalid / unknown command
 *
 *@param head
 *@param server

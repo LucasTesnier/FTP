@@ -59,8 +59,6 @@ connexion_t *server_init(data_t *head)
 {
     connexion_t *server = malloc(sizeof(connexion_t) * 1);
 
-    if (server == NULL)
-        return NULL;
     server->my_socket = create_socket(head);
     if (server->my_socket == INVALID_SOCKET)
         return NULL;

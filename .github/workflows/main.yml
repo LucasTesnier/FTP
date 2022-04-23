@@ -18,10 +18,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      
+
       - run: make
         timeout-minutes: 5
-  
+
   tests_run:
     name: tests_run
     runs-on: ubuntu-latest
@@ -56,4 +56,3 @@ jobs:
             ${{ env.REPO_URL }}
           ssh_private_key:
             ${{ secrets.PUBLIC_SSH }}
-      

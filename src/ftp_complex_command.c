@@ -166,9 +166,8 @@ char *arg)
         "550 Can't remove file.\n") == FTP_ERROR)
             return FTP_ERROR;
     } else {
-        if (write_to_client(head, client,
-        "250 Requested file action okay, completed.\n") == FTP_ERROR)
-            return FTP_ERROR;
+        write_to_client(head, client,
+        "250 Requested file action okay, completed.\n");
     }
     free(path);
     return FUNCTION_SUCCESS;
