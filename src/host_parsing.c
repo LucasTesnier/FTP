@@ -6,6 +6,8 @@
 */
 
 #include "host_parsing.h"
+#include "macro.h"
+#include "ftp_command.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -83,4 +85,31 @@ int get_host_and_port_from_line(char *line, char *host, int *port)
     if (get_port_from_line(line, port, pos))
         return INVALID_LINE;
     return SUCCESS;
+}
+
+void fill_readfs_select(data_t *head, fd_set *readfs)
+{
+    for (int i = 0; i < head->size; i++)
+        if (head->data[i]->is_active)
+            FD_SET(head->data[i]->my_socket, readfs);
+}
+
+char *setup_pasv_connection(data_t *head, connexion_t *server,
+connexion_t *client)
+{
+    int port = htons(client->interface.sin_port) * 10;
+    sockaddr_in_t *temp = NULL;
+
+    client->d_trans.my_socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (client->d_trans.my_socket == FTP_ERROR)
+        return NULL;
+    client->d_trans.interface.sin_port = htons(port);
+    temp = &(client->d_trans.interface);
+    if (bind(client->d_trans.my_socket, (sockaddr_t *)temp, sizeof *temp) ==
+    INVALID_INTERFACE) {
+        write_to_client(head, client, "550 Socket bind.\n");
+        return NULL;
+    }
+    client->d_trans.is_active = true;
+    return get_line_from_host_and_port("127.0.0.1", port);
 }

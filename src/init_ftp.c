@@ -9,10 +9,11 @@
 #include "init_ftp.h"
 #include "socket_function.h"
 #include "ftp_command.h"
+#include "host_parsing.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "utils.h"
 #include <signal.h>
 
 static int running = 1;
@@ -96,9 +97,7 @@ int server_loop(connexion_t *server, data_t *head)
     while (running) {
         FD_ZERO(&readfs);
         FD_SET(server->my_socket, &readfs);
-        for (int i = 0; i < head->size; i++)
-            if (head->data[i]->is_active)
-                FD_SET(head->data[i]->my_socket, &readfs);
+        fill_readfs_select(head, &readfs);
         max = ((head->size > 0) ? head->data[head->size - 1]->my_socket :
         server->my_socket);
         if (select(max + 1, &readfs, NULL, NULL, NULL) < 0 && running == 1) {

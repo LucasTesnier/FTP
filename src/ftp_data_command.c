@@ -88,6 +88,31 @@ char *arg)
     return FUNCTION_SUCCESS;
 }
 
+int command_pasv(data_t *head, connexion_t *server, connexion_t *client,
+char *arg)
+{
+    char *line = NULL;
+
+    if (client->is_auth != CONNECTED) {
+        if (write_to_client(head, client,
+            "530 Need account for execute this command.\n") == FTP_ERROR)
+            return FTP_ERROR;
+        return FUNCTION_SUCCESS;
+    }
+    if (client->d_trans.is_active == true) {
+        if (write_to_client(head, client, "550 Socket bind.\n") == FTP_ERROR)
+            return FTP_ERROR;
+        return FUNCTION_SUCCESS;
+    }
+    if ((line = setup_pasv_connection(head, server, client)) == NULL)
+        return FTP_ERROR;
+    write_to_client(head, client, "227 Entering Passive Mode (");
+    write_to_client(head, client, line);
+    write_to_client(head, client, ").\n");
+    free(line);
+    return FUNCTION_SUCCESS;
+}
+
 /**
 *@brief Get the file content object
 *

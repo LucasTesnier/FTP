@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static const int COMMAND_NUMBER = 12;
+static const int COMMAND_NUMBER = 13;
 
 static const command_t ALL_COMMAND[] = {
     {"QUIT", NULL, &command_quit},
@@ -25,6 +25,7 @@ static const command_t ALL_COMMAND[] = {
     {"HELP", NULL, &command_help},
     {"PWD", NULL, &command_pwd},
     {"CDUP", NULL, &command_cdup},
+    {"PASV", NULL, &command_pasv},
     {"USER", "", &command_user},
     {"PASS", "", &command_pass},
     {"CWD", "", &command_cwd},
