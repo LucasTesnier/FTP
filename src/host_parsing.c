@@ -42,7 +42,7 @@ char *get_line_from_host_and_port(char *host, int port)
 int get_port_from_line(char *line, int *port, int pos)
 {
     char *endPtr = NULL;
-    int first = strtol(line + pos - 2, &endPtr, 10);
+    int first = strtol(line + pos + 1, &endPtr, 10);
     int second = 0;
 
     if (line == endPtr)
@@ -69,17 +69,17 @@ int get_host_and_port_from_line(char *line, char *host, int *port)
     int pos = 0;
 
     for (int i = 0; i < strlen(line); i++) {
+        if (count == 3)
+            pos = i;
         if (line[i] == ',') {
             line[i] = '.';
             count++;
         }
-        if (count == 4)
-            pos = i;
     }
     if (count != 5)
         return INVALID_LINE;
     host[0] = '\0';
-    strncat(host, line, pos - 2);
+    strncat(host, line, pos);
     if (get_port_from_line(line, port, pos))
         return INVALID_LINE;
     return SUCCESS;

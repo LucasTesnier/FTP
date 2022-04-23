@@ -44,7 +44,7 @@ char *arg)
         return FTP_ERROR;
     client->d_trans.interface.sin_addr.s_addr = *(in_addr_t *)hostinfo->h_addr;
     client->d_trans.interface.sin_family = AF_INET;
-    client->d_trans.interface.sin_port = htons(port);
+    client->d_trans.interface.sin_port = htons((int)port);
     if (connect(client->d_trans.my_socket,
         (sockaddr_t *)(&client->d_trans.interface),
         sizeof(sockaddr_t)) == FTP_ERROR)
